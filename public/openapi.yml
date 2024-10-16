@@ -1,0 +1,67 @@
+openapi: 3.1.0
+info:
+  title: Sample API
+  description: A sample API to demonstrate OpenAPI YAML specification with Next.js App Router
+  version: 1.0.0
+servers:
+  # - url: http://localhost:3000/api
+  - url: https://hortus-api.vercel.app/api/v1
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+paths:
+  /users:
+    get:
+      summary: Get all users
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    email:
+                      type: string
+        '401':
+          description: Unauthorized - Invalid or missing JWT
+  /users/{id}:
+    get:
+      summary: Get a user by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A single user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+        '401':
+          description: Unauthorized - Invalid or missing JWT
+        '404':
+          description: User not found
